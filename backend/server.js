@@ -18,7 +18,7 @@ const server = http.createServer(api);
 
 const allowedOrigins = [
     "http://localhost:5173",
-    'https://gigflow.netlify.app',
+    'https://gigflows.netlify.app',
     process.env.CLIENT_URL
 ].filter(Boolean);
 
