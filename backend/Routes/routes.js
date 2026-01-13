@@ -67,6 +67,7 @@ router.post("/gigs", protect, async (req, res) => {
             ownerId: req.user._id
         });
 
+        await newGig.save();
         res.status(200).json({ message: "Gig created successfully", gig: newGig });
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
@@ -121,6 +122,8 @@ router.post("/bids", protect, async (req, res) => {
             freelancerId: req.user._id,
             message,
         });
+
+        await newBid.save();
 
         res.status(200).json({ message: "Bid created successfully", bid: newBid });
 
@@ -177,7 +180,7 @@ router.patch("/bids/:bidId/hire", protect, async (req, res) => {
         }
 
         bid.status = "hired";
-        await bid.save();
+
 
         // Reject all other bids for this gig
         await BidSchema.updateMany(
@@ -200,6 +203,8 @@ router.patch("/bids/:bidId/hire", protect, async (req, res) => {
             userId: bid.freelancerId,
             message
         });
+
+        await bid.save();
 
         res.status(200).json({ message: "Bid accepted successfully", gig: updatedGig, bid });
 
