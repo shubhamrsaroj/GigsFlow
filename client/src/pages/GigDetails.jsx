@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { gigApi } from '../api/gigApi';
 import { bidApi } from '../api/bidApi';
 import { useAuth } from '../context/AuthContext';
-import { Briefcase, DollarSign, User, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Briefcase, IndianRupee, User, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const GigDetails = () => {
     const { id } = useParams();
@@ -125,7 +125,7 @@ const GigDetails = () => {
                             <div className="text-right">
                                 <p className="text-sm text-gray-500 mb-1">Budget</p>
                                 <p className="text-2xl font-bold text-green-600 flex items-center justify-end">
-                                    <DollarSign className="h-6 w-6" />
+                                    <IndianRupee className="h-6 w-6" />
                                     {gig.budget}
                                 </p>
                             </div>
