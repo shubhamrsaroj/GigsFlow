@@ -179,6 +179,12 @@ router.patch("/bids/:bidId/hire", protect, async (req, res) => {
         bid.status = "hired";
         await bid.save();
 
+        // Reject all other bids for this gig
+        await BidSchema.updateMany(
+            { gigId: gig._id, _id: { $ne: bidId } },
+            { status: "rejected" }
+        );
+
         // Send Real-time Notification
         const freelancerSocketId = userSocketMap[bid.freelancerId];
         const message = `You have been hired for the gig: ${gig.title}!`;
