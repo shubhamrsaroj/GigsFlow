@@ -36,6 +36,7 @@ export const SocketProvider = ({ children }) => {
                 },
             });
 
+
             setSocket(socketInstance);
 
             socketInstance.on("hire_notification", (data) => {

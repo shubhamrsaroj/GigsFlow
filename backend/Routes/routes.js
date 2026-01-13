@@ -28,6 +28,13 @@ router.post("/register", async (req, res) => {
 
     await newUser.save();
 
+    res.cookie('jwt', jsonwebtoken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
+
     res.status(200).json({ message: "User registered successfully", token: jsonwebtoken, user: { id: newUser._id, name: newUser.name, email: newUser.email } });
 
 });
@@ -51,6 +58,13 @@ router.post("/login", async (req, res) => {
     const jsonwebtoken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
     await user.save();
+
+    res.cookie('jwt', jsonwebtoken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
 
     res.status(200).json({ message: "User logged in successfully", token: jsonwebtoken, user: { id: user._id, name: user.name, email: user.email } });
 });
@@ -225,6 +239,14 @@ router.get("/notifications", protect, async (req, res) => {
 
 router.get("/me", protect, async (req, res) => {
     res.status(200).json(req.user);
+});
+
+router.post("/logout", (req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.status(200).json({ message: "Logged out successfully" });
 });
 
 export default router;

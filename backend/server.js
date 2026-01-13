@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import router from "./Routes/routes.js";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -25,7 +26,8 @@ const allowedOrigins = [
 const io = new Server(server, {
     cors: {
         origin: allowedOrigins,
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
@@ -57,9 +59,10 @@ io.on("connection", (socket) => {
 
 
 
-api.use(cors({ origin: allowedOrigins }));
+api.use(cors({ origin: allowedOrigins, credentials: true }));
 
 api.use(express.json());
+api.use(cookieParser());
 
 api.use(helmet({ "crossOriginResourcePolicy": "cross-origin" }));
 

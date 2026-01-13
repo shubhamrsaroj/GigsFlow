@@ -14,17 +14,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const checkLoggedIn = async () => {
-            const token = sessionStorage.getItem('token');
-            if (token) {
-                try {
-                    const response = await authApi.getCurrentUser();
-                    setCurrentUser({ token, ...response.data });
-                } catch (error) {
-                    sessionStorage.removeItem('token');
-                    setCurrentUser(null);
-                }
+            try {
+                const response = await authApi.getCurrentUser();
+                setCurrentUser(response.data);
+            } catch (error) {
+                setCurrentUser(null);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         checkLoggedIn();
@@ -34,28 +31,29 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const response = await authApi.login({ email, password });
-        const { token, user } = response.data;
-        sessionStorage.setItem('token', token);
-        setCurrentUser({ token, ...user });
-        console.log(currentUser);
+        const { user } = response.data;
+        setCurrentUser(user);
         return response;
     };
 
     const register = async (name, email, password) => {
         const response = await authApi.register({ name, email, password });
-        const { token, user } = response.data;
-        sessionStorage.setItem('token', token);
-        setCurrentUser({ token, ...user });
+        const { user } = response.data;
+        setCurrentUser(user);
         return response;
     };
 
-    const logout = () => {
-        sessionStorage.removeItem('token');
+    const logout = async () => {
+        try {
+            await authApi.logout();
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
         setCurrentUser(null);
         window.location.href = '/login';
     };
 
-    console.log(currentUser);
+    // console.log(currentUser);
 
     const value = {
         currentUser,

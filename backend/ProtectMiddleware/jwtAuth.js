@@ -5,9 +5,13 @@ const protect = async (req, res, next) => {
 
     try {
 
-        if (req.headers.authorization && req.headers.authorization.includes("Bearer")) {
+        let token = req.cookies.jwt;
 
-            const token = req.headers.authorization.split(" ")[1];
+        if (!token && req.headers.authorization && req.headers.authorization.includes("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
+        }
+
+        if (token) {
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
