@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from "../../api/api.js";
+import { gigApi } from "../api/gigApi";
 import { useNavigate } from 'react-router-dom';
 import { Briefcase, DollarSign, FileText, AlertCircle } from 'lucide-react';
 
@@ -29,7 +29,7 @@ const PostGig = () => {
         }
 
         try {
-            await api.post('/gigs', formData);
+            await gigApi.createGig(formData);
             navigate('/gigs'); // Redirect to gigs list after success
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong. Please try again.');

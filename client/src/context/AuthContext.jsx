@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import api from "../../api/api.js";
+import { authApi } from "../api/authApi";
 
 const AuthContext = createContext();
 
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
             const token = sessionStorage.getItem('token');
             if (token) {
                 try {
-                    const response = await api.get('/me');
+                    const response = await authApi.getCurrentUser();
                     setCurrentUser({ token, ...response.data });
                 } catch (error) {
                     sessionStorage.removeItem('token');
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = async (email, password) => {
-        const response = await api.post('/login', { email, password });
+        const response = await authApi.login({ email, password });
         const { token, user } = response.data;
         sessionStorage.setItem('token', token);
         setCurrentUser({ token, ...user });
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (name, email, password) => {
-        const response = await api.post('/register', { name, email, password });
+        const response = await authApi.register({ name, email, password });
         const { token, user } = response.data;
         sessionStorage.setItem('token', token);
         setCurrentUser({ token, ...user });

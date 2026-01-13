@@ -185,6 +185,7 @@ router.patch("/bids/:bidId/hire", protect, async (req, res) => {
             { status: "rejected" }
         );
 
+
         // Send Real-time Notification
         const freelancerSocketId = userSocketMap[bid.freelancerId];
         const message = `You have been hired for the gig: ${gig.title}!`;
@@ -194,7 +195,6 @@ router.patch("/bids/:bidId/hire", protect, async (req, res) => {
                 message
             });
         }
-
         // Save Notification to Database
         await NotificationSchema.create({
             userId: bid.freelancerId,

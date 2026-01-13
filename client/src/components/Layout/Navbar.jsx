@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, User, LogOut, Briefcase, Bell } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
-import api from '../../../api/api';
+import { notificationApi } from "../../api/notificationApi";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ const Navbar = () => {
 
     const fetchNotifications = async () => {
         try {
-            const res = await api.get('/notifications');
+            const res = await notificationApi.getNotifications();
             setNotifications(res.data);
         } catch (err) {
             console.error("Failed to fetch notifications", err);

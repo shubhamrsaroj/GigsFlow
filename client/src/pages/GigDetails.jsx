@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../api/api';
+import { gigApi } from '../api/gigApi';
+import { bidApi } from '../api/bidApi';
 import { useAuth } from '../context/AuthContext';
 import { Briefcase, DollarSign, User, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -19,14 +20,14 @@ const GigDetails = () => {
     useEffect(() => {
         const fetchGigDetails = async () => {
             try {
-                const response = await api.get(`/gigs/${id}`);
+                const response = await gigApi.getGigById(id);
                 setGig(response.data);
 
                 const currentUserId = currentUser?.id || currentUser?._id;
 
                 // If current user is owner, fetch bids
                 if (currentUser && response.data.ownerId._id === currentUserId) {
-                    const bidsResponse = await api.get(`/bids/${id}`);
+                    const bidsResponse = await bidApi.getGigBids(id);
                     setBids(bidsResponse.data);
                 }
             } catch (err) {
@@ -49,7 +50,7 @@ const GigDetails = () => {
         setSuccessMessage('');
 
         try {
-            await api.post('/bids', {
+            await bidApi.placeBid({
                 gigId: id,
                 message: bidMessage
             });
@@ -66,12 +67,12 @@ const GigDetails = () => {
         if (!window.confirm("Are you sure you want to hire this freelancer?")) return;
 
         try {
-            await api.patch(`/bids/${bidId}/hire`);
+            await bidApi.hireFreelancer(bidId);
             setSuccessMessage("Freelancer hired successfully!");
             // Refresh Data
-            const gigRes = await api.get(`/gigs/${id}`);
+            const gigRes = await gigApi.getGigById(id);
             setGig(gigRes.data);
-            const bidsRes = await api.get(`/bids/${id}`);
+            const bidsRes = await bidApi.getGigBids(id);
             setBids(bidsRes.data);
         } catch (err) {
             alert(err.response?.data?.message || "Failed to hire freelancer");

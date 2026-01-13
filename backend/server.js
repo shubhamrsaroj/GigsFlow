@@ -29,6 +29,9 @@ const io = new Server(server, {
     }
 });
 
+
+
+
 export const userSocketMap = {}; // userId -> socketId
 
 
@@ -51,6 +54,8 @@ io.on("connection", (socket) => {
         }
     });
 });
+
+
 
 api.use(cors({ origin: allowedOrigins }));
 

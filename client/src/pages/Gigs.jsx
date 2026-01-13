@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from "../../api/api.js";
+import { gigApi } from "../api/gigApi";
 import { Search, MapPin, DollarSign, Clock, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const Gigs = () => {
         const fetchGigs = async () => {
             setLoading(true);
             try {
-                const response = await api.get(`/gigs?search=${debouncedSearchTerm}`);
+                const response = await gigApi.getAllGigs(debouncedSearchTerm);
                 setGigs(response.data);
             } catch (error) {
                 console.error("Error fetching gigs:", error);
