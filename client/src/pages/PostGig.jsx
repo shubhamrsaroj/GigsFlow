@@ -29,7 +29,11 @@ const PostGig = () => {
         }
 
         try {
-            await gigApi.createGig(formData);
+            const payload = {
+                ...formData,
+                budget: formData.budget.replace(/,/g, "")
+            };
+            await gigApi.createGig(payload);
             navigate('/gigs'); // Redirect to gigs list after success
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong. Please try again.');
@@ -39,21 +43,21 @@ const PostGig = () => {
     };
 
     const formatIndianNumber = (value) => {
-  if (!value) return "";
+        if (!value) return "";
 
-  const number = value.replace(/,/g, "");
-  return Number(number).toLocaleString("en-IN");
-};
+        const number = value.replace(/,/g, "");
+        return Number(number).toLocaleString("en-IN");
+    };
 
-const handleBudgetChange = (e) => {
-  const rawValue = e.target.value.replace(/,/g, "");
-  if (isNaN(rawValue)) return;
+    const handleBudgetChange = (e) => {
+        const rawValue = e.target.value.replace(/,/g, "");
+        if (isNaN(rawValue)) return;
 
-  setFormData({
-    ...formData,
-    budget: formatIndianNumber(rawValue),
-  });
-};
+        setFormData({
+            ...formData,
+            budget: formatIndianNumber(rawValue),
+        });
+    };
 
 
     return (
@@ -114,27 +118,27 @@ const handleBudgetChange = (e) => {
                                 </div>
                             </div>
 
-                           <div>
-  <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
-    Budget
-  </label>
+                            <div>
+                                <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Budget
+                                </label>
 
-  <div className="relative rounded-md shadow-sm">
-    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-      <IndianRupee className="h-5 w-5 text-gray-400" aria-hidden="true" />
-    </div>
+                                <div className="relative rounded-md shadow-sm">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <IndianRupee className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    </div>
 
-    <input
-      type="text"
-      name="budget"
-      id="budget"
-      value={formData.budget}
-      onChange={handleBudgetChange}
-      placeholder="0"
-      className="block w-full rounded-lg border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border"
-    />
-  </div>
-</div>
+                                    <input
+                                        type="text"
+                                        name="budget"
+                                        id="budget"
+                                        value={formData.budget}
+                                        onChange={handleBudgetChange}
+                                        placeholder="0"
+                                        className="block w-full rounded-lg border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border"
+                                    />
+                                </div>
+                            </div>
 
 
                             <div className="pt-4 flex items-center justify-end gap-4">
