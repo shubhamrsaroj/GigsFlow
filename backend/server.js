@@ -15,6 +15,7 @@ import { Server } from "socket.io";
 dotenv.config();
 
 const api = express();
+api.set('trust proxy', 1); // Trust first proxy (Render/Netlify)
 const server = http.createServer(api);
 
 const allowedOrigins = [
