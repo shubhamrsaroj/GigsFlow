@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { gigApi } from "../api/gigApi";
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, DollarSign, FileText, AlertCircle } from 'lucide-react';
+import { Briefcase, IndianRupee, FileText, AlertCircle } from 'lucide-react';
 
 const PostGig = () => {
     const [formData, setFormData] = useState({
@@ -37,6 +37,24 @@ const PostGig = () => {
             setLoading(false);
         }
     };
+
+    const formatIndianNumber = (value) => {
+  if (!value) return "";
+
+  const number = value.replace(/,/g, "");
+  return Number(number).toLocaleString("en-IN");
+};
+
+const handleBudgetChange = (e) => {
+  const rawValue = e.target.value.replace(/,/g, "");
+  if (isNaN(rawValue)) return;
+
+  setFormData({
+    ...formData,
+    budget: formatIndianNumber(rawValue),
+  });
+};
+
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -96,26 +114,28 @@ const PostGig = () => {
                                 </div>
                             </div>
 
-                            <div>
-                                <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Budget ($)
-                                </label>
-                                <div className="relative rounded-md shadow-sm">
-                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <DollarSign className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    </div>
-                                    <input
-                                        type="number"
-                                        name="budget"
-                                        id="budget"
-                                        min="0"
-                                        value={formData.budget}
-                                        onChange={handleChange}
-                                        placeholder="0.00"
-                                        className="block w-full rounded-lg border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border"
-                                    />
-                                </div>
-                            </div>
+                           <div>
+  <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
+    Budget
+  </label>
+
+  <div className="relative rounded-md shadow-sm">
+    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+      <IndianRupee className="h-5 w-5 text-gray-400" aria-hidden="true" />
+    </div>
+
+    <input
+      type="text"
+      name="budget"
+      id="budget"
+      value={formData.budget}
+      onChange={handleBudgetChange}
+      placeholder="0"
+      className="block w-full rounded-lg border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border"
+    />
+  </div>
+</div>
+
 
                             <div className="pt-4 flex items-center justify-end gap-4">
                                 <button
