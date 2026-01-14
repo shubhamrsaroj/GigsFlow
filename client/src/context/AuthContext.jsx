@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authApi } from "../api/authApi";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 const AuthContext = createContext();
 
@@ -66,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {loading ? <LoadingSpinner /> : children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
