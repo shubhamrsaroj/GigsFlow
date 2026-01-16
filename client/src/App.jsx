@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import PostGig from './pages/PostGig'
 import Gigs from './pages/Gigs'
 import GigDetails from './pages/GigDetails'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
@@ -16,7 +17,11 @@ function App() {
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/post-job" element={<PostGig />} />
+        <Route path="/post-job" element={
+          <ProtectedRoute>
+            <PostGig />
+          </ProtectedRoute>
+        } />
         <Route path="/gigs" element={<Gigs />} />
         <Route path="/gigs/:id" element={<GigDetails />} />
       </Routes>
